@@ -27,7 +27,7 @@ Next, you can create a new instance of `MultiConn` struct by calling the `New` f
 ```go
     mySQLConnection := entity.Options{
         Name :  "mysql_1",
-        Driver:   constants.MYSQL,
+        Driver:   driver.MYSQL,
         Host:     "localhost",
         Port:     3306,
         Username: "root",
@@ -37,7 +37,7 @@ Next, you can create a new instance of `MultiConn` struct by calling the `New` f
 
     postgresConnection := entity.Options{
         Name :  "psql_1",
-        Driver:   constants.POSTGRES,
+        Driver:   driver.POSTGRES,
         Host:     "localhost",
         Port:     5432,
         Username: "user",
@@ -53,10 +53,10 @@ Next, you can create a new instance of `MultiConn` struct by calling the `New` f
     multiConn := dbmux.New(dbConnections...)
 ```
 
-Once you have an instance of `MultiConn`, you can retrieve a connection object from a specific driver's connection pool by calling the `GetConnectionPool` method and providing the desired driver name:
+Once you have an instance of `MultiConn`, you can retrieve a connection object from a specific driver's connection pool by calling the `GetConnection` method and providing the desired driver name:
 
 ```go
-    psqlConnection, err := dbmuxConn.GetConnection("psql_1")
+    psqlConnection, err := MultiConn.GetConnection("psql_1")
     if err != nil {
         panic(err)
     }
@@ -72,18 +72,25 @@ see [examples](examples/init.go) for more
 
 
 ## entity.Options
-- `Name`: specifies a name for this connection.
-- `Driver`: specifies the type of database driver to use (constants.MYSQL in this case) for establishing the connection.
-- `Host`: specifies the host of the MySQL database server.
-- `User`: specifies the user to be used to connect to the database server.
-- `Password`: specifies the password for the specified user.
-- `Database`: specifies the name of the database to connect to.
-- `Port`: specifies the port number on which the MySQL server is listening.
-- `ConnectionOptions` field is used to specify additional connection pool settings
-    - `SetConnMaxLifetime`: sets the maximum amount of time a connection can remain open before being closed.
-    - `SetConnMaxIdleTime`: sets the maximum amount of time a connection can remain idle in the pool before being closed.
-    - `SetMaxOpenConns`: sets the maximum number of open connections that can exist in the pool at any given time.
-    - `SetMaxIdleConns`: sets the maximum number of idle (unused) connections that can exist in the pool at any given time
+| Key               | Description                                                                                               |
+|-------------------|-----------------------------------------------------------------------------------------------------------|
+| Name              | specifies a name for this connection.                                                                     |
+| Driver            | specifies the type of database driver to use ( driver.MYSQL , driver.POSTGRES, driver.MONGO )             |
+| Host              | specifies the host of the database server.                                                          |
+| User              | specifies the user to be used to connect to the database server.                                          |
+| Password          | specifies the password for the specified user.                                                            |
+| Database          | specifies the name of the database to connect to.                                                         |
+| Port              | specifies the port number on which the server is listening.                                         |
+| ConnectionOptions | field is used to specify additional connection pool settings                                              |
+
+
+### ConnectionOptions
+|         Function Name      | Description                                                                                       |
+|----------------------------|---------------------------------------------------------------------------------------------------|
+| options.SetConnMaxLifetime | sets the maximum amount of time a connection can remain open before being closed.                 |
+| options.SetConnMaxIdleTime | sets the maximum amount of time a connection can remain idle in the pool before being closed.     |
+| options.SetMaxOpenConns    | sets the maximum number of open connections that can exist in the pool at any given time.         |
+| options.SetMaxIdleConns    | sets the maximum number of idle (unused) connections that can exist in the pool at any given time |
 
 see [example](examples/connection-options.go) 
 

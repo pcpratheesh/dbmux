@@ -18,6 +18,7 @@ type Options struct {
 
 	Port              int                 `json:"port" validate:"required"`
 	ConnectionOptions []ConnectionOptions `json:"connection_options"`
+	Retries           int                 `json:"retries"`
 }
 
 type Pool map[string]interface{}
